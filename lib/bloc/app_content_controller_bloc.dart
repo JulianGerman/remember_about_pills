@@ -8,13 +8,13 @@ part 'app_content_controller_state.dart';
 
 class AppContentControllerBloc
     extends Bloc<AppContentControllerEvent, AppContentControllerState> {
-  AppContentControllerBloc() : super(AppContentBeforeLoggedIn());
+  AppContentControllerBloc() : super(AppContentBeforeLoggedInState());
   @override
   Stream<AppContentControllerState> mapEventToState(
     AppContentControllerEvent event,
   ) async* {
     if (event is SaveLoginDataEvent) {
-      yield AppContentAfterLoggedIn();
+      yield AppContentAfterLoggedInState();
     }
   }
 }

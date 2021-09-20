@@ -3,9 +3,9 @@ part of 'app_content_controller_bloc.dart';
 @immutable
 abstract class AppContentControllerState {}
 
-class AppContentBeforeLoggedIn extends AppContentControllerState {}
+class AppContentBeforeLoggedInState extends AppContentControllerState {}
 
-class AppContentAfterLoggedIn extends AppContentControllerState {}
+class AppContentAfterLoggedInState extends AppContentControllerState {}
 // class AppContentControllerInitial extends AppContentControllerState {}
 
 // class TickerInitial extends TickerState {
