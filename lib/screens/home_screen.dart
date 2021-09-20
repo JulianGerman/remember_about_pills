@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remember_about_pills/bloc/app_content_controller_bloc.dart';
 import 'package:remember_about_pills/widgets/custom_button.dart';
 import 'package:remember_about_pills/widgets/modal_bottom_sheet.dart';
 
@@ -33,74 +35,83 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ]),
       ]),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: deviceHeigth * 0.25,
-              color: Theme.of(context).primaryColor,
-              child: Column(children: [
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).accentColor,
-                  radius: deviceHeigth * 0.05,
-                  child: Text('PHOTO'),
-                ),
-                Divider(
-                  indent: mediaQuery.width * 0.3,
-                  endIndent: mediaQuery.width * 0.3,
-                ),
-                Text('Name Surname'),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomButton(
-                      bgColor: Colors.grey,
-                      textColor: Colors.black,
-                      title: 'Button',
-                      onTap: () {
-                        print('Button1');
-                      },
-                    ),
-                    CustomButton(
-                      bgColor: Theme.of(context).accentColor,
-                      textColor: Colors.white,
-                      title: 'Button',
-                      onTap: () {
-                        print('Button2');
-                      },
-                    )
-                  ],
-                )
-              ]),
-            ),
-            Expanded(
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: downContainerColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40))),
-                  width: double.infinity,
-                  child:
-                      // child: pillData.items.isEmpty
-                      Center(
-                          child: Text(
-                    'Empty list',
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.black45,
-                        fontWeight: FontWeight.bold),
-                  ))
-                  // : buildListView(pillData),
+      body: BlocBuilder<AppContentControllerBloc, AppContentControllerState>(
+        builder: (context, state) {
+          if (state is AppContentBeforeLoggedIn) {
+            return Text('Loggin Screen');
+          }
+          if (state is AppContentAfterLoggedIn) {
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: deviceHeigth * 0.25,
+                    color: Theme.of(context).primaryColor,
+                    child: Column(children: [
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).accentColor,
+                        radius: deviceHeigth * 0.05,
+                        child: Text('PHOTO'),
+                      ),
+                      Divider(
+                        indent: mediaQuery.width * 0.3,
+                        endIndent: mediaQuery.width * 0.3,
+                      ),
+                      Text('Name Surname'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CustomButton(
+                            bgColor: Colors.grey,
+                            textColor: Colors.black,
+                            title: 'Button',
+                            onTap: () {
+                              print('Button1');
+                            },
+                          ),
+                          CustomButton(
+                            bgColor: Theme.of(context).accentColor,
+                            textColor: Colors.white,
+                            title: 'Button',
+                            onTap: () {
+                              print('Button2');
+                            },
+                          )
+                        ],
+                      )
+                    ]),
                   ),
-            )
-          ],
-        ),
+                  Expanded(
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: downContainerColor,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40))),
+                        width: double.infinity,
+                        child:
+                            // child: pillData.items.isEmpty
+                            Center(
+                                child: Text(
+                          'Empty list',
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold),
+                        ))
+                        // : buildListView(pillData),
+                        ),
+                  )
+                ],
+              ),
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remember_about_pills/bloc/app_content_controller_bloc.dart';
 import 'package:remember_about_pills/screens/home_screen.dart';
 
 void main() {
@@ -24,7 +26,10 @@ class _RememberAboutPillsState extends State<RememberAboutPills> {
           cardColor: Color(0xFFF2F9F7),
           canvasColor: Colors.transparent,
           scaffoldBackgroundColor: Colors.white),
-      home: HomeScreen(),
+      home: MultiBlocProvider(providers: [
+        BlocProvider<AppContentControllerBloc>(
+            create: (BuildContext context) => AppContentControllerBloc()),
+      ], child: HomeScreen()),
       routes: {},
     );
   }
