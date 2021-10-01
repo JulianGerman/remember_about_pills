@@ -21,8 +21,6 @@ Application where user can save his medicine.
 App is not completed. Need to be fixed.
 Lots of improvements will be added.
 
-<div style="display: block;
-  margin-left: auto;
-  margin-right: auto"><img src="Screen1.png" width="300" title="Screen 1"> <img src="Screen2.png" width="300" title="Screen 2"> <img src="Screen3.png" width="300" title="Screen 3"></div>
+<img src="Screen1.png" width="300" title="Screen 1"> <img src="Screen2.png" width="300" title="Screen 2"> <img src="Screen3.png" width="300" title="Screen 3">
 
 
