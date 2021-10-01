@@ -1,16 +1,28 @@
-# remember_about_pills
+# Remember about pills 
 
-A new Flutter project.
+Application where user can save his medicine.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## STACK
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- BLOC
+- Hive
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Application contains: 
+- 1 main screen where user can add/remove his medicine.
+- 1 login screen where user can fill in his name.
+
+#### Requirements
+
+- Smartphone
+
+## Info
+App is not completed. Need to be fixed.
+Lots of improvements will be added.
+
+<img src="" width="350" title="Screen 1">
+<img src="" width="350" title="Screen 2">
+<img src="" width="350" title="Screen 3">
+
+
