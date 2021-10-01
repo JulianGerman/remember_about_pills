@@ -70,8 +70,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   selectedFillColor: Colors.black,
                   onChanged: (v) {
                     setState(() {
-                      weekDaySelectorValues[v % 8] =
-                          !weekDaySelectorValues[v % 8];
+                      weekDaySelectorValues[v % 7] =
+                          !weekDaySelectorValues[v % 7];
                       if (weekDaySelectorValues.elementAt(v) == true) {
                         weekDaySelectorInt.add(v);
                       }
