@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:remember_about_pills/bloc/app_content_controller_bloc.dart';
 import 'package:remember_about_pills/screens/home_screen.dart';
 import 'package:remember_about_pills/screens/login_screen.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
-void main() {
+import 'bloc/pill_bloc.dart';
+import 'models/pill.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(PillAdapter());
+  await Hive.openBox('user');
+
   runApp(RememberAboutPills());
 }
 
@@ -20,7 +31,10 @@ class _RememberAboutPillsState extends State<RememberAboutPills> {
     return MultiBlocProvider(
         providers: [
           BlocProvider<AppContentControllerBloc>(
-              create: (BuildContext context) => AppContentControllerBloc())
+              create: (BuildContext context) => AppContentControllerBloc()),
+          BlocProvider<PillBloc>(
+            create: (context) => PillBloc(),
+          )
         ],
         child: MaterialApp(
           title: 'Remember about pills !',
@@ -35,15 +49,49 @@ class _RememberAboutPillsState extends State<RememberAboutPills> {
           home:
               BlocBuilder<AppContentControllerBloc, AppContentControllerState>(
             builder: (context, state) {
-              if (state is AppContentBeforeLoggedInState) {
-                return LoginScreen();
+              //Check if user is already logged in
+              final userBox = Hive.box('user');
+              if (userBox.containsKey(1) ||
+                  state is AppContentAfterLoggedInState) {
+                return FutureBuilder(
+                    future: Hive.openBox('pills'),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return HomeScreen();
+                      }
+                      if (snapshot.hasError) {
+                        return Text(snapshot.error.toString());
+                      } else {
+                        return Scaffold(
+                            body: Center(child: CircularProgressIndicator()));
+                      }
+                    });
               }
-              if (state is AppContentAfterLoggedInState) {
-                return HomeScreen();
+              if (state is AppContentBeforeLoggedInState) {
+                return FutureBuilder(
+                  future: Hive.openBox('user'),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return LoginScreen();
+                    }
+                    if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    }
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                );
               }
             },
           ),
           routes: {},
         ));
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
   }
 }
