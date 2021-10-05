@@ -19,16 +19,17 @@ class _LoginScreenState extends State<LoginScreen> {
     var mediaQuery = MediaQuery.of(context).size;
     var deviceHeigth =
         mediaQuery.height; // do zmiany bo trzeba dodać APP BAR i NOTCH
-
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TopView(deviceHeigth: deviceHeigth),
-          BottomView(
-            deviceHeigth: deviceHeigth,
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TopView(deviceHeigth: deviceHeigth),
+            BottomView(
+              deviceHeigth: deviceHeigth,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,8 @@ import 'package:remember_about_pills/bloc/pill_bloc.dart';
 import 'package:remember_about_pills/models/pill.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
+import 'bloc/counter_bloc.dart';
+
 class ModalBottomSheet extends StatefulWidget {
   @override
   _ModalBottomSheetState createState() => _ModalBottomSheetState();
@@ -42,26 +44,28 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     IconButton(
                         icon: Icon(Icons.remove),
                         onPressed: () {
-                          setState(() {
-                            if (_amountPerDay > 0) {
-                              _amountPerDay--;
-                            }
-                          });
+                          if (_amountPerDay > 0) {
+                            BlocProvider.of<CounterBloc>(context)
+                                .add(CounterDecrementEvent());
+                          }
                         }),
-                    Text(
-                      _amountPerDay.toString(),
-                      style: TextStyle(
-                        fontSize: 40,
-                      ),
+                    BlocBuilder<CounterBloc, int>(
+                      builder: (context, state) {
+                        _amountPerDay = state;
+                        return Text(state.toString(),
+                            style: TextStyle(
+                              fontSize: 40,
+                            ));
+                      },
                     ),
                     IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () {
-                          setState(() {
-                            if (_amountPerDay < 10) {
-                              _amountPerDay++;
-                            }
-                          });
+                          if (_amountPerDay < 10) {
+                            BlocProvider.of<CounterBloc>(context)
+                                .add(CounterIncrementEvent());
+                            ;
+                          }
                         }),
                   ],
                 ),
@@ -78,47 +82,56 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     });
                   },
                   values: weekDaySelectorValues),
-              Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        crossAxisSpacing: 5.0,
-                        mainAxisSpacing: 5.0,
-                      ),
-                      itemCount: _amountPerDay,
-                      itemBuilder: (ctx, index) {
-                        return TextButton(
-                            onPressed: () async {
-                              final TimeOfDay timeofPill = await showTimePicker(
-                                  builder:
-                                      (BuildContext context, Widget child) {
-                                    return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child);
-                                  },
-                                  context: context,
-                                  initialEntryMode: TimePickerEntryMode.input,
-                                  initialTime: TimeOfDay(
-                                      hour: int.parse(
-                                          getHour(index).split(":")[0]),
-                                      minute: int.parse(
-                                          getHour(index).split(":")[1])));
-                              if (timeofPill != null) {
-                                setState(() {
-                                  _timeOfDayPills.add(timeofPill.toString());
-                                  print(_timeOfDayPills);
-                                });
-                              }
-                            },
-                            child: Text(
-                              getHour(index),
-                            ),
-                            style: ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).accentColor)));
-                      })),
+              BlocBuilder<CounterBloc, int>(
+                builder: (context, state) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          crossAxisSpacing: 5.0,
+                          mainAxisSpacing: 5.0,
+                        ),
+                        itemCount: state,
+                        itemBuilder: (ctx, index) {
+                          return TextButton(
+                              onPressed: () async {
+                                final TimeOfDay timeofPill =
+                                    await showTimePicker(
+                                        builder: (BuildContext context,
+                                            Widget child) {
+                                          return MediaQuery(
+                                              data: MediaQuery.of(context)
+                                                  .copyWith(
+                                                      alwaysUse24HourFormat:
+                                                          true),
+                                              child: child);
+                                        },
+                                        context: context,
+                                        initialEntryMode:
+                                            TimePickerEntryMode.input,
+                                        initialTime: TimeOfDay(
+                                            hour: int.parse(
+                                                getHour(index).split(":")[0]),
+                                            minute: int.parse(
+                                                getHour(index).split(":")[1])));
+                                if (timeofPill != null) {
+                                  setState(() {
+                                    _timeOfDayPills.add(timeofPill.toString());
+                                    print(_timeOfDayPills);
+                                  });
+                                }
+                              },
+                              child: Text(
+                                getHour(index),
+                              ),
+                              style: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).accentColor)));
+                        }),
+                  );
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(

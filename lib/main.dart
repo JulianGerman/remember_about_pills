@@ -5,6 +5,7 @@ import 'package:remember_about_pills/bloc/app_content_controller_bloc.dart';
 import 'package:remember_about_pills/screens/home_screen.dart';
 import 'package:remember_about_pills/screens/login_screen.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:remember_about_pills/widgets/home_screen_widgets/bloc/counter_bloc.dart';
 
 import 'bloc/pill_bloc.dart';
 import 'models/pill.dart';
@@ -34,6 +35,9 @@ class _RememberAboutPillsState extends State<RememberAboutPills> {
               create: (BuildContext context) => AppContentControllerBloc()),
           BlocProvider<PillBloc>(
             create: (context) => PillBloc(),
+          ),
+          BlocProvider<CounterBloc>(
+            create: (context) => CounterBloc(),
           )
         ],
         child: MaterialApp(
