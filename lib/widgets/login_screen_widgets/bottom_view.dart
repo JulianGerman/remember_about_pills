@@ -39,6 +39,12 @@ class BottomView extends StatelessWidget {
               onSaved: (newValue) => _name = newValue,
               textCapitalization: TextCapitalization.words,
               controller: _name,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                   hintText: 'ex. Julian',
                   border: OutlineInputBorder(
@@ -58,10 +64,11 @@ class BottomView extends StatelessWidget {
             title: 'Submit!',
             textColor: Colors.white,
             onTap: () {
-              _formKey.currentState.save();
-
-              BlocProvider.of<AppContentControllerBloc>(context)
-                  .add(SaveLoginDataEvent()..saveLogin(_name));
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                BlocProvider.of<AppContentControllerBloc>(context)
+                    .add(SaveLoginDataEvent()..saveLogin(_name));
+              }
             })
       ],
     );

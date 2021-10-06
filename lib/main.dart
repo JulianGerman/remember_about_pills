@@ -80,9 +80,9 @@ class _RememberAboutPillsState extends State<RememberAboutPills> {
                     }
                     if (snapshot.hasError) {
                       return Text(snapshot.error.toString());
-                    }
-                    if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return Scaffold(
+                          body: Center(child: CircularProgressIndicator()));
                     }
                   },
                 );

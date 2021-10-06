@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:remember_about_pills/widgets/home_screen_widgets/home_screen_bottom_view.dart';
 import 'package:remember_about_pills/widgets/home_screen_widgets/home_screen_top_view.dart';
 import 'package:remember_about_pills/widgets/home_screen_widgets/modal_bottom_sheet.dart';
-import '../constraints.dart';
+import '../other/constraints.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -42,25 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: downContainerColor,
               context: context,
               isScrollControlled: true,
-              builder: (context) => ModalBottomSheet());
+              builder: (context) => ModalBottomSheet(
+                    title: 'Add your pill',
+                  ));
         },
       ),
     );
-  }
-}
-
-class EmptyListText extends StatelessWidget {
-  const EmptyListText({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: Text(
-      'Empty list',
-      style: TextStyle(
-          fontSize: 40, color: Colors.black45, fontWeight: FontWeight.bold),
-    ));
   }
 }

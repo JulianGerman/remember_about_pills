@@ -5,7 +5,8 @@ import 'package:remember_about_pills/bloc/pill_bloc.dart';
 import 'package:remember_about_pills/models/pill.dart';
 import 'package:remember_about_pills/widgets/home_screen_widgets/pill_tile.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../constraints.dart';
+import '../../other/constraints.dart';
+import 'modal_bottom_sheet.dart';
 
 class HomeScreenBottomView extends StatelessWidget {
   @override
@@ -29,55 +30,71 @@ class HomeScreenBottomView extends StatelessWidget {
                       final pill = pillsBox.getAt(index) as Pill;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Dismissible(
-                          background: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.transparent),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 12.0),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(Icons.delete, color: Colors.red),
-                                  ]),
-                            ),
-                          ),
-                          key: UniqueKey(),
-                          onDismissed: (direction) {
-                            // naprawić kierunek !!!!
-                            if (direction == DismissDirection.endToStart) {
-                              pillsBox.deleteAt(index);
-                              pillsBox.compact();
-                            }
-                          },
-                          confirmDismiss: (DismissDirection direction) async {
-                            return await showDialog(
+                        child: GestureDetector(
+                          onLongPress: () {
+                            showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(25.0))),
+                                backgroundColor: downContainerColor,
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    content: Text(
-                                        "Are you sure you want to delete this item?"),
-                                    actions: <Widget>[
-                                      TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(true),
-                                          child: const Text("Delete")),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                        child: const Text("Cancel"),
-                                      ),
-                                    ],
-                                  );
-                                });
+                                isScrollControlled: true,
+                                builder: (context) => ModalBottomSheet(
+                                      title: 'Edit your pill',
+                                    ));
                           },
-                          child: PillTile(
-                            id: pill.id,
-                            title: pill.title,
-                            amountPerDay: pill.amountPerDay,
-                            activeWeekDays: pill.activeWeekDays,
-                            pillTimeOfDay: pill.timeOfDayPills,
+                          child: Dismissible(
+                            background: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.transparent),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 12.0),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(Icons.delete, color: Colors.red),
+                                      Icon(Icons.delete, color: Colors.red),
+                                    ]),
+                              ),
+                            ),
+                            key: UniqueKey(),
+                            onDismissed: (_) {
+                              {
+                                BlocProvider.of<PillBloc>(context).add(
+                                    RemovePillData()..removePillData(index));
+                                pillsBox.compact();
+                              }
+                            },
+                            confirmDismiss: (DismissDirection direction) async {
+                              return await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: Text(
+                                          "Are you sure you want to delete this item?"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text("Delete")),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: const Text("Cancel"),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: PillTile(
+                              id: pill.id,
+                              title: pill.title,
+                              amountPerDay: pill.amountPerDay,
+                              activeWeekDays: pill.activeWeekDays,
+                              pillTimeOfDay: pill.timeOfDayPills,
+                            ),
                           ),
                         ),
                       );
