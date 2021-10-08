@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:hive/hive.dart';
-import 'package:remember_about_pills/bloc/app_content_controller_bloc.dart';
-import 'package:remember_about_pills/widgets/home_screen_widgets/custom_button.dart';
+
 import 'package:remember_about_pills/widgets/login_screen_widgets/bottom_view.dart';
 import 'package:remember_about_pills/widgets/login_screen_widgets/top_view.dart';
 

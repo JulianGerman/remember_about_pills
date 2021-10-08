@@ -5,7 +5,7 @@ import 'package:remember_about_pills/widgets/home_screen_widgets/custom_button.d
 
 class BottomView extends StatelessWidget {
   final double deviceHeigth;
-  final _formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   BottomView({
     Key key,
     this.deviceHeigth,
